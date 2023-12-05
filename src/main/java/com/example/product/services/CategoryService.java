@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class CategoryService {
+public class CategoryService implements CategoryServiceInterface {
 	
 	@Autowired
     private CategoryRepository categoryRepository;
@@ -39,11 +39,12 @@ public class CategoryService {
         	existingCategory.setCategoryName(updatedCategory.getCategoryName());
         	existingCategory.setCategoryActiveStatus(updatedCategory.getCategoryActiveStatus());
         	existingCategory.setCategoryDescription(updatedCategory.getCategoryDescription());
-        	existingCategory.setCategoryId(updatedCategory.getCategoryId());
         	
+        	categoryRepository.save(existingCategory);
+        	return "Category is Updated Successfully";        	
         }
-        categoryRepository.save(existingCategory);
-        return "Catgeory is Updated Successfully";
+        else
+        	return "Catgeory is Not Updated";
     }
 
     public String deleteCategory(Long categoryId) {

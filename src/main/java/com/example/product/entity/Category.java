@@ -1,9 +1,14 @@
 package com.example.product.entity;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -20,18 +25,22 @@ public class Category {
     private String categoryDescription;
 	
 	@Column(name="categoryActiveStatus", length = 15,nullable = false)
-    private long categoryActiveStatus;
+    private Boolean categoryActiveStatus;
     
+//	
+	@OneToMany(mappedBy="category", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<SubCategory> subCategory;
     
 //    Constructors
     
     public Category(Long categoryId, String categoryName, String categoryDescription,
-    		long categoryActiveStatus) {
+    		Boolean categoryActiveStatus, List<SubCategory> subCategory) {
     	super();
     	this.categoryId = categoryId;
     	this.categoryName = categoryName;
     	this.categoryDescription = categoryDescription;
     	this.categoryActiveStatus = categoryActiveStatus;
+    	this.subCategory = subCategory;
     	
     }
     
@@ -65,11 +74,11 @@ public class Category {
 		this.categoryDescription = categoryDescription;
 	}
 
-	public long getCategoryActiveStatus() {
+	public Boolean getCategoryActiveStatus() {
 		return categoryActiveStatus;
 	}
 
-	public void setCategoryActiveStatus(long categoryActiveStatus) {
+	public void setCategoryActiveStatus(Boolean categoryActiveStatus) {
 		this.categoryActiveStatus = categoryActiveStatus;
 	}
 }

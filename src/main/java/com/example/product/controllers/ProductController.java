@@ -31,6 +31,7 @@ public class ProductController {
     }
 
     @GetMapping("/GetProductById/{productId}")
+//    @GetMapping("/GetProductByName/{productName}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
     	Product p = productService.getProductById(productId);
     	return new ResponseEntity<Product>(p, HttpStatus.OK);
@@ -52,8 +53,6 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) {
         String msg = productService.deleteProduct(productId);
         return new ResponseEntity<String>(msg, HttpStatus.OK);
-    }
-
-    
-	
+//        return "Product is Deleted";
+    }	
 }

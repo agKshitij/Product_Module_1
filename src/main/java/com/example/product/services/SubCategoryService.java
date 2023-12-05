@@ -6,38 +6,62 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.product.entity.Category;
+import com.example.product.entity.SubCategory;
 import com.example.product.repositories.CategoryRepository;
+import com.example.product.repositories.SubCategoryRepository;
+
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
-public class SubCategoryService {
+@Transactional
+public class SubCategoryService implements SubCategoryServiceInterface {
 	
 	@Autowired
-    private CategoryRepository categoryRepository;
+    private SubCategoryRepository subCategoryRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<SubCategory> getAllSubCategories() {
+        return subCategoryRepository.findAll();
     }
 
-    public Category getCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + categoryId));
+    public SubCategory getSubCategoryById(Long subCategoryId) {
+        return subCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Sub Category not found with id: " + subCategoryId));
     }
 
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public String createSubCategory(SubCategory subCategory, Long categoryId) {
+    	Category c = categoryRepository.findById(categoryId).get();
+    	if(c != null) {
+    		subCategory.setCategory(c);
+    		subCategoryRepository.save(subCategory);
+    		return "SubCategory Created Successfully";
+    	}
+    	else        
+    		return "SubCategory Not Created Successfully";
     }
 
-    public Category updateCategory(Long categoryId, Category updatedCategory) {
-        Category existingCategory = getCategoryById(categoryId);
-        // Update existingCategory fields with updatedCategory fields
-        return categoryRepository.save(existingCategory);
+    public String updateSubCategory(Long subCategoryId, SubCategory updatedSubCategory) {
+        SubCategory existingSubCategory = getSubCategoryById(subCategoryId);
+        // Update existingSubCategory fields with updatedSubCategory fields
+        if(existingSubCategory != null) {
+        	existingSubCategory.setSubCategoryName(updatedSubCategory.getSubCategoryName());
+        	subCategoryRepository.save(existingSubCategory);
+            return "SubCategory is Updated Successfully";
+        }
+        else
+        	return "SubCategory is Not Updated Successfully";
+        
     }
 
-    public void deleteCategory(Long categoryId) {
-        Category existingCategory = getCategoryById(categoryId);
-        categoryRepository.delete(existingCategory);
+    public String deleteSubCategory(Long subCategoryId) {
+        SubCategory existingSubCategory = getSubCategoryById(subCategoryId);
+        subCategoryRepository.delete(existingSubCategory);
+        return "SubCategory Deleted Successfully";
     }
+
 
 }

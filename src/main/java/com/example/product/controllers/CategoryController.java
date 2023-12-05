@@ -32,7 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping("/GetCategoryById/{categoryId}")
-    public ResponseEntity<Category> getProductById(@PathVariable Long categoryId) {
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
     	Category p = categoryService.getCategoryById(categoryId);
     	return new ResponseEntity<Category>(p, HttpStatus.OK);
     }

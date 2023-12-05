@@ -2,6 +2,7 @@ package com.example.product.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,10 +21,6 @@ public class Product {
 	@Column(name="productName", length = 50,nullable = false) // adding the column into the table
     private String productName;
 
-    @ManyToOne
-    @JoinColumn(name = "subCategoryId")
-    private SubCategory subCategory;
-
 	@Column(name="productDescription", length = 50,nullable = false)
     private String productDescription;
 
@@ -35,12 +32,14 @@ public class Product {
 
 	@Column(name="productImageUrl", length = 50,nullable = false)
     private String productImageUrl;
-    
-    
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subCategoryId")
+    private SubCategory subCategory;   
     
     
     public Product(Long productId, String productName,String productDescription, 
-    		long productPrice, int productQuantity, String productImageUrl) {
+    		long productPrice, int productQuantity, String productImageUrl, SubCategory subCategory) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
@@ -48,9 +47,14 @@ public class Product {
 		this.productPrice = productPrice;
 		this.productQuantity = productQuantity;
 		this.productImageUrl = productImageUrl;
+		this.subCategory = subCategory;
+		
 		
 	}
+
 	
+	
+
 
 	public Product() {
 		
@@ -107,5 +111,16 @@ public class Product {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+	
+	public SubCategory getSubCategory() {
+		return subCategory;
+	}
+
+
+	public void setSubCategory(SubCategory subCategory) {
+		this.subCategory = subCategory;
+	}
+	
+	
 
 }
